@@ -1,0 +1,59 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<section class="section">
+  <h1>Prediction Result</h1>
+  <div class="grid-2">
+    <div class="card">
+      <h3>Patient Summary</h3>
+      <p><strong>ID:</strong> {{ patient_id }}<br>
+         <strong>Name:</strong> {{ patient_name }}<br>
+         <strong>Model:</strong> {{ model_name }}</p>
+
+      <h4>Result</h4>
+      <p class="result {{ 'positive' if result==1 else 'negative' }}">{{ result_text }}</p>
+      <p><strong>Confidence:</strong> {{ confidence }}%</p>
+
+      <form method="post" action="{{ url_for('download_report') }}">
+        <input type="hidden" name="patient_id" value="{{ patient_id }}">
+        <input type="hidden" name="patient_name" value="{{ patient_name }}">
+        <input type="hidden" name="model_name" value="{{ model_name }}">
+        <input type="hidden" name="result_text" value="{{ result_text }}">
+        <input type="hidden" name="confidence" value="{{ confidence }}">
+        {% for f, val in zip(features, inputs) %}
+          <input type="hidden" name="{{ f }}" value="{{ val }}">
+        {% endfor %}
+        <button class="btn" type="submit">Download PDF Report</button>
+        <a class="btn btn-light" href="{{ url_for('index') }}">Back</a>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Entered Features</h3>
+      <div class="grid-2">
+        {% for f, val in zip(features, inputs) %}
+          <div class="kv"><span>{{ f.replace('_',' ').title() }}</span><b>{{ val }}</b></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Model Performance</h2>
+  <div class="card">
+    {% if metrics %}
+    <table>
+      <thead><tr><th>Metric</th><th>Score</th></tr></thead>
+      <tbody>
+        {% for k, v in metrics.items() %}
+          <tr><td>{{ k|capitalize }}</td><td>{{ v if v is not none else '-' }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No metrics available. Train models first.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

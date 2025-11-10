@@ -1,0 +1,28 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Heart AI — Prediction & Insights</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  </head>
+  <body>
+    <nav class="nav">
+      <div class="brand">❤️ Heart AI</div>
+      <div class="right">
+        <a href="{{ url_for('index') }}" class="btn btn-light">Dashboard</a>
+        <a href="https://github.com/" target="_blank" class="btn btn-ghost">Repo</a>
+      </div>
+    </nav>
+    <main class="container">
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="footer">
+      <div>Final Year Project • Built with Flask & scikit-learn</div>
+    </footer>
+  </body>
+</html>

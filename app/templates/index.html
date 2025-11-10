@@ -1,0 +1,89 @@
+
+{% extends "layout.html" %}
+{% block content %}
+<section class="section">
+  <h1>Model Performance Dashboard</h1>
+  <p class="muted">Compare algorithms, review metrics, and run predictions.</p>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Performance Metrics (Test Set)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Accuracy</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1</th>
+            <th>ROC-AUC</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for model_name, m in metrics.items() %}
+          <tr>
+            <td>{{ model_name }}</td>
+            <td>{{ m.accuracy }}</td>
+            <td>{{ m.precision }}</td>
+            <td>{{ m.recall }}</td>
+            <td>{{ m.f1 }}</td>
+            <td>{{ m.roc_auc if m.roc_auc is not none else "-" }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Make a Prediction</h3>
+      <form method="post" action="{{ url_for('predict') }}" class="form-grid">
+        <div class="grid-2">
+          <div>
+            <label>Patient ID</label>
+            <input type="text" name="patient_id" placeholder="e.g., P001">
+          </div>
+          <div>
+            <label>Patient Name</label>
+            <input type="text" name="patient_name" placeholder="e.g., Alex">
+          </div>
+        </div>
+
+        <div class="grid-3">
+          {% for f in features %}
+          <div>
+            <label>{{ f.replace('_',' ').title() }}</label>
+            <input type="number" step="any" name="{{ f }}" required>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <label>Algorithm</label>
+            <select name="model_name">
+              {% for m in models %}
+              <option value="{{ m }}">{{ m }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="align-end">
+            <button class="btn" type="submit">Predict</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <h2>Charts & Visualizations</h2>
+  <div class="gallery">
+    {% for title, path in chart_files %}
+    <figure class="card img-card">
+      <img src="{{ url_for('static', filename=path) }}" alt="{{ title }}">
+      <figcaption>{{ title }}</figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
