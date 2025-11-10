@@ -17,7 +17,7 @@ from reportlab.lib.units import mm
 # --------------------------
 BASE = Path(__file__).resolve().parent.parent
 MODELS_DIR = BASE / "models"
-DATA_PATH = BASE / "data" / "UCI_CLEANED_DATASET.csv"
+DATA_PATH = BASE / "data" / "heart_clean.csv"
 REPORTS_DIR = BASE / "reports"
 METRICS_PATH = MODELS_DIR / "metrics.json"
 
