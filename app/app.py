@@ -186,8 +186,16 @@ def download_report():
     return send_file(buffer, as_attachment=True, download_name=filename, mimetype="application/pdf")
 
 if __name__ == "__main__":
+    import os
+
     # Ensure models exist
-    missing = [k for k,v in MODEL_FILES.items() if not v.exists()]
+    missing = [k for k, v in MODEL_FILES.items() if not v.exists()]
     if missing:
         print("⚠️ Models not found. Run `python train.py` from the project root first.")
-    app.run(debug=True)
+
+    # Get Render-assigned port (or default to 5000 for local)
+    port = int(os.environ.get("PORT", 5000))
+
+    # Run app on all available network interfaces (Render requirement)
+    app.run(host="0.0.0.0", port=port, debug=False)
+
